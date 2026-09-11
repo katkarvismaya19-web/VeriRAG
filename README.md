@@ -529,13 +529,3 @@ Each major capability is:
 
 This approach keeps the system maintainable while creating a clear engineering history of how the platform evolves from a basic RAG foundation into a production-oriented knowledge intelligence system.
 
-```
-
-### One important change
-
-I intentionally changed the README from **“these are the capabilities”** to **“implemented / in progress / planned.”**
-
-That distinction is valuable for a recruiter. You can confidently say **“I implemented X”** and **“I designed the architecture for Y”** without overstating the project's current state.
-
-Before committing this README, I'd also recommend we **verify the README's run command against your actual `backend/app/main.py`** so we don't document a command that doesn't match the current project. After that, we can commit the README as its own milestone.
-```
