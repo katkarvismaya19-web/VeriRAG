@@ -11,8 +11,13 @@ class RetrievalService:
     def __init__(
         self,
         embedding_service: EmbeddingService | None = None,
+        min_score: float = 0.75,
     ):
+        if not 0.0 <= min_score <= 1.0:
+            raise ValueError("min_score must be between 0.0 and 1.0.")
+
         self.embedding_service = embedding_service or EmbeddingService()
+        self.min_score = min_score
 
     def retrieve(
         self,
@@ -20,7 +25,7 @@ class RetrievalService:
         query: str,
         limit: int = 5,
     ) -> list[RetrievalResult]:
-        """Embed a query and return the most similar document chunks."""
+        """Embed a query and return sufficiently relevant document chunks."""
 
         if not query or not query.strip():
             raise ValueError("Query must not be empty.")
@@ -30,8 +35,14 @@ class RetrievalService:
 
         query_embedding = self.embedding_service.embed_text(query)
 
-        return search_similar_chunks(
+        results = search_similar_chunks(
             db=db,
             query_embedding=query_embedding,
             limit=limit,
         )
+
+        return [
+            result
+            for result in results
+            if result.score >= self.min_score
+        ]
