@@ -1,308 +1,597 @@
 # VeriRAG
 
-**Evidence-Grounded Enterprise Knowledge & Decision Intelligence Platform**
+### Evidence-Grounded Enterprise Knowledge & Decision Intelligence Platform
 
-VeriRAG is a production-oriented Retrieval-Augmented Generation (RAG) platform designed to answer questions from enterprise knowledge while providing **verifiable evidence, citations, and transparent retrieval behavior**.
+> **VeriRAG is a production-oriented Retrieval-Augmented Generation (RAG) platform designed to turn enterprise documents into trustworthy, citation-backed answers and measurable knowledge intelligence.**
 
-The goal is to build more than a basic document chatbot: VeriRAG is being engineered as a measurable, explainable, modular, and production-oriented knowledge intelligence system.
+VeriRAG is being built with a **SaaS-first architecture** for organizations that need to securely ingest internal knowledge, retrieve relevant evidence, generate grounded answers, and measure the quality and reliability of their AI knowledge systems.
 
----
+The core principle is simple:
 
-## Current Status
-
-🚧 **Active development**
-
-The core document-to-retrieval pipeline is currently implemented and tested.
-
-### Implemented
-
-* PDF and DOCX document upload
-* Document metadata persistence
-* PDF and DOCX parsing
-* Document chunking
-* Page-aware chunk metadata
-* Semantic embeddings using `BAAI/bge-small-en-v1.5`
-* PostgreSQL + pgvector vector storage
-* Cosine-similarity vector retrieval
-* Configurable retrieval relevance threshold
-* Citation-ready evidence construction
-* Evidence-aware generation contract
-* Insufficient-evidence handling
-* Generation provider abstraction
-* Automated unit and integration tests
-
-### In Progress
-
-* Real LLM-backed answer generation
-* Citation-aware answer formatting
-* End-to-end RAG orchestration
-* Query API
-* Better retrieval evaluation and threshold calibration
-
-### Planned
-
-* Hybrid vector + keyword retrieval
-* Reranking
-* Query rewriting
-* Multi-document reasoning
-* Multi-hop reasoning
-* Comparative and analytical queries
-* Contradiction detection
-* Document-version awareness
-* Role-based access control
-* RAG evaluation and benchmarking
-* User feedback and analytics
-* Observability and audit logging
-* Production frontend and analytics dashboard
-* Background processing with Redis/workers
-* Docker-based deployment and CI/CD
+**An AI answer should be traceable to evidence, not just plausible.**
 
 ---
 
-## Architecture
+## Why VeriRAG?
+
+Enterprise RAG systems have a fundamental problem:
+
+> **Generating an answer is easy. Generating an answer that can be trusted is much harder.**
+
+VeriRAG focuses on the trust layer around RAG:
+
+* Evidence-backed answers
+* Source citations
+* Insufficient-evidence detection
+* Citation validation
+* Retrieval quality measurement
+* Document-aware retrieval
+* Evaluation-driven improvements
+* Provider-independent LLM architecture
+* Production-oriented separation of concerns
+* Future multi-tenant SaaS isolation
+
+The goal is not to build another chatbot.
+
+The goal is to build a **measurable enterprise knowledge infrastructure layer**.
+
+---
+
+# Product Vision
+
+VeriRAG is being designed as a SaaS platform where organizations can create isolated knowledge environments for their teams.
+
+### Target workflow
 
 ```text
-                         ┌─────────────────────┐
-                         │      Documents      │
-                         │    PDF / DOCX       │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │      Parsing        │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │     Chunking        │
-                         │ page-aware metadata │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │     Embeddings      │
-                         │ BGE-small-en-v1.5   │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │ PostgreSQL +        │
-                         │     pgvector        │
-                         └──────────┬──────────┘
-                                    │
-                                    │
-                         ┌──────────▼──────────┐
-                         │   Vector Retrieval  │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │  RetrievalService   │
-                         │ relevance filtering │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │   EvidenceService   │
-                         │ citation-ready data │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │  GenerationService  │
-                         │ evidence-grounded   │
-                         │      answers        │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │  Answer + Citations │
-                         └─────────────────────┘
+Organization
+      │
+      ├── Users
+      │
+      ├── Knowledge Bases
+      │       │
+      │       ├── Documents
+      │       │      ├── Versions
+      │       │      └── Metadata
+      │       │
+      │       └── Permissions
+      │
+      └── Queries
+              │
+              ▼
+        Query Understanding
+              │
+              ▼
+        Hybrid Retrieval
+              │
+              ▼
+           Reranking
+              │
+              ▼
+        Evidence Selection
+              │
+              ▼
+        Grounded Generation
+              │
+              ▼
+      Citation Validation
+              │
+              ▼
+        Trusted Response
+              │
+              ├── Citations
+              ├── Evidence
+              └── Quality Signals
+```
+
+Future platform capabilities will include:
+
+* Multi-tenant organizations
+* Knowledge bases
+* Role-based access control
+* Document versioning
+* Usage analytics
+* Evaluation dashboards
+* Audit logs
+* Retrieval observability
+* Feedback loops
+* Usage/billing infrastructure
+
+---
+
+# Current Status
+
+## Phase 1 — RAG Foundation
+
+**Status: 🟢 Complete**
+
+Implemented:
+
+* Python project structure
+* FastAPI backend
+* PostgreSQL integration
+* SQLAlchemy ORM
+* Alembic migration foundation
+* pgvector integration
+* Document upload API
+* PDF ingestion
+* DOCX ingestion
+* OCR fallback for scanned PDFs
+* Page-aware document parsing
+* Document chunking
+* Chunk persistence
+* Semantic embeddings
+* Vector similarity search
+* Retrieval ranking
+* Retrieval relevance threshold
+* Evidence construction
+* Citation-ready evidence context
+
+---
+
+## Phase 2 — Grounded Generation
+
+**Status: 🟢 Complete**
+
+Implemented and tested:
+
+* LLM provider abstraction
+* OpenAI provider
+* Prompt construction
+* Evidence-constrained generation
+* Insufficient-evidence handling
+* Citation extraction
+* Citation → page/section mapping
+* Citation validation
+* Unsupported citation detection
+* Query orchestration
+* Structured query responses
+* `/api/v1/query` endpoint
+* Provider-independent automated tests
+
+Current generation test status:
+
+```text
+13 passed
+```
+
+The generation pipeline is now:
+
+```text
+Query
+  ↓
+Retrieval
+  ↓
+Evidence Context
+  ↓
+Prompt Builder
+  ↓
+LLM Provider
+  ↓
+Citation Extraction
+  ↓
+Citation Validation
+  ↓
+Structured Query Result
 ```
 
 ---
 
-## Technology Stack
+# Phase 3 — Advanced Retrieval
 
-### Backend
-
-* **Python**
-* **FastAPI**
-* **SQLAlchemy**
-* **Alembic**
-* **Pydantic / Pydantic Settings**
-
-### RAG Pipeline
-
-* Custom ingestion pipeline
-* PDF parsing with `pypdf`
-* DOCX parsing with `python-docx`
-* Custom text and paragraph chunking
-* `sentence-transformers`
-* `BAAI/bge-small-en-v1.5`
-* Custom retrieval and evidence pipeline
-
-### Database
-
-* **PostgreSQL 16**
-* **pgvector**
-* SQLAlchemy ORM
-
-### Testing
-
-* **pytest**
-* Unit tests
-* Database integration tests
-* Retrieval tests
-* Embedding tests
-* Evidence and generation contract tests
-
-### Infrastructure
-
-* **Docker**
-* Docker Compose
-* PostgreSQL container
-
-### Frontend
+**Status: 🔵 Next**
 
 Planned:
 
-* **Next.js**
-* **TypeScript**
-* **Tailwind CSS**
+* Hybrid vector + lexical retrieval
+* Reciprocal Rank Fusion
+* Candidate expansion
+* Cross-encoder reranking
+* Query rewriting
+* Query expansion
+* Multi-document retrieval
+* Multi-hop retrieval
+* Comparative questions
+* Retrieval strategy configuration
+
+The important design principle:
+
+> **Every retrieval improvement will be evaluated against a baseline.**
+
+Instead of adding retrieval techniques because they are popular, VeriRAG will measure whether they actually improve retrieval quality.
 
 ---
 
-## RAG Pipeline
+# Phase 4 — Trust & Evaluation
 
-The current RAG pipeline is deliberately modular:
+**Status: 🟡 In Progress**
+
+Implemented:
+
+* Retrieval evaluation model
+* Recall@K metric
+* Retrieval evaluator
+* Labeled retrieval cases
+* Real-document evaluation
+* Evaluation tests
+
+Current evaluation results include:
 
 ```text
-Document
-   ↓
-Parser
-   ↓
-Chunker
-   ↓
-EmbeddingService
-   ↓
-Vector Storage
-   ↓
-RetrievalService
-   ↓
-EvidenceService
-   ↓
-GenerationService
+Retrieval metric tests:       4 passed
+Evaluator tests:              1 passed
+Real report benchmark:        Recall@5 = 1.00
 ```
 
-Each stage has a focused responsibility.
+The first real benchmark evaluates retrieval against an actual processed internship report.
 
-This makes it possible to test and improve individual components without coupling the entire system together.
+Planned evaluation capabilities:
+
+* Precision@K
+* Recall@K
+* MRR
+* nDCG
+* Retrieval threshold analysis
+* Retrieval benchmark datasets
+* Groundedness evaluation
+* Citation correctness
+* Citation completeness
+* Answer relevance
+* Insufficient-evidence evaluation
+* Contradiction detection
+* Regression evaluation
+* Automated evaluation reports
 
 ---
 
-## Evidence-Grounded Generation
+# Phase 5 — SaaS & Production Platform
 
-A central design principle of VeriRAG is:
+**Status: 🔵 Planned**
 
-> **The system should not fabricate an answer when the available evidence is insufficient.**
+VeriRAG will evolve from a RAG engine into a multi-tenant SaaS platform.
 
-The generation layer therefore receives a structured `EvidenceContext` rather than arbitrary document text.
-
-Conceptually:
+### Multi-tenancy
 
 ```text
-EvidenceContext
+Platform
+   │
+   ├── Organization A
+   │     ├── Users
+   │     ├── Knowledge Bases
+   │     └── Documents
+   │
+   ├── Organization B
+   │     ├── Users
+   │     ├── Knowledge Bases
+   │     └── Documents
+   │
+   └── Organization C
+         ├── Users
+         ├── Knowledge Bases
+         └── Documents
+```
+
+Planned:
+
+* Organization/tenant isolation
+* User authentication
+* Role-based access control
+* Knowledge-base permissions
+* Document-level permissions
+* API authentication
+* Audit logging
+* Document versioning
+* Background ingestion workers
+* Redis
+* Task queues
+* Rate limiting
+* Usage metering
+* Subscription/billing architecture
+* Production logging
+* Metrics
+* Distributed tracing
+* Error monitoring
+* CI/CD
+* Containerized deployment
+* Cloud deployment
+
+---
+
+# Core Architecture
+
+VeriRAG deliberately separates the RAG pipeline into independently testable layers.
+
+```text
+                    ┌──────────────────┐
+                    │    FastAPI API   │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Query Service    │
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              ▼                             ▼
+      ┌────────────────┐            ┌────────────────┐
+      │ Retrieval      │            │ Generation     │
+      │ Service        │            │ Service        │
+      └───────┬────────┘            └───────┬────────┘
+              │                             │
+              ▼                             ▼
+      ┌────────────────┐            ┌────────────────┐
+      │ PostgreSQL     │            │ LLM Provider   │
+      │ + pgvector     │            │ Abstraction    │
+      └────────────────┘            └────────────────┘
+              │                             │
+              └──────────────┬──────────────┘
+                             ▼
+                    ┌──────────────────┐
+                    │ Evidence &       │
+                    │ Citation Layer   │
+                    └──────────────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Evaluation       │
+                    │ Infrastructure   │
+                    └──────────────────┘
+```
+
+---
+
+# Document Ingestion Pipeline
+
+VeriRAG supports both normal text PDFs and scanned documents.
+
+```text
+Upload
+  ↓
+File Validation
+  ↓
+Document Persistence
+  ↓
+PDF / DOCX Parser
+  ↓
+Native Text Extraction
+  │
+  └── if insufficient text
+          ↓
+        OCR
+  ↓
+Page-Aware Parsed Content
+  ↓
+Semantic Chunking
+  ↓
+Chunk Persistence
+  ↓
+Embedding Generation
+  ↓
+pgvector
+```
+
+### Supported formats
+
+* PDF
+* DOCX
+
+### PDF processing
+
+Native PDF text extraction is attempted first.
+
+For scanned/image-based pages, VeriRAG automatically falls back to OCR.
+
+This allows the same ingestion pipeline to process both:
+
+* digitally generated PDFs
+* scanned documents
+
+---
+
+# Retrieval Pipeline
+
+Current retrieval uses semantic vector search with PostgreSQL + pgvector.
+
+```text
+User Query
+    ↓
+Query Embedding
+    ↓
+Vector Similarity Search
+    ↓
+Ranked Candidates
+    ↓
+Relevance Threshold
+    ↓
+Evidence Context
+```
+
+Each retrieval result contains information such as:
+
+* document ID
+* chunk ID
+* similarity score
+* text
+* page number
+* section
+
+This metadata becomes the foundation for citation-aware generation.
+
+---
+
+# Evidence-Grounded Generation
+
+VeriRAG does not simply send a user question to an LLM.
+
+The model receives:
+
+```text
+USER QUESTION
+
++
+
+RETRIEVED EVIDENCE
+
++
+
+GROUNDING INSTRUCTIONS
+```
+
+The generation contract instructs the model to:
+
+1. Use only supplied evidence.
+2. Avoid unsupported claims.
+3. Cite claims using available citation IDs.
+4. Never invent citation IDs.
+5. Clearly report insufficient evidence.
+6. Prefer concise answers.
+
+---
+
+# Citation Integrity
+
+Citation validation is treated as a first-class component.
+
+For example, if retrieved evidence contains:
+
+```text
+[1] Employee handbook — page 4
+[2] Leave policy — page 5
+```
+
+and the model produces:
+
+```text
+Employees receive 20 days of annual leave [1].
+```
+
+the citation is valid.
+
+If the model produces:
+
+```text
+Employees receive 20 days of annual leave [99].
+```
+
+VeriRAG detects:
+
+```text
+invalid_citation_ids = [99]
+is_valid = false
+```
+
+Unsupported citations are deliberately **not silently discarded**.
+
+This creates an explicit trust boundary between:
+
+```text
+LLM output
       ↓
-GenerationService
+Citation extraction
       ↓
-GeneratedAnswer
-      ├── answer
-      ├── citations
-      └── has_evidence
+Citation validation
+      ↓
+Trust signal
 ```
-
-When no sufficiently relevant evidence is retrieved, the system can explicitly return an insufficient-evidence response instead of pretending to know the answer.
-
-This design will later support:
-
-* citation validation
-* groundedness evaluation
-* contradiction detection
-* evidence coverage metrics
-* answer-quality evaluation
 
 ---
 
-## Retrieval
+# Insufficient Evidence
 
-VeriRAG currently uses semantic vector retrieval.
+A core VeriRAG principle is:
 
-Documents are converted into normalized embeddings using:
+> **Not knowing is better than confidently hallucinating.**
+
+When retrieval does not provide sufficient evidence, the generation layer can return an explicit insufficient-evidence response rather than inventing an answer.
+
+This behavior will eventually become part of the evaluation framework and SaaS quality metrics.
+
+---
+
+# Evaluation Philosophy
+
+RAG quality is not measured by whether the system "sounds good."
+
+VeriRAG is being built around measurable evaluation.
+
+Example:
 
 ```text
-BAAI/bge-small-en-v1.5
+                 Baseline
+                    │
+                    ▼
+             Vector Retrieval
+                    │
+              Recall@5 = X
+                    │
+                    ▼
+             Hybrid Retrieval
+                    │
+              Recall@5 = Y
+                    │
+                    ▼
+         Hybrid + Reranking
+                    │
+              Recall@5 = Z
 ```
 
-The model produces **384-dimensional embeddings**, which are stored in PostgreSQL using pgvector.
-
-Retrieval uses cosine similarity to rank candidate document chunks.
-
-A configurable relevance threshold is applied after retrieval so that weakly related chunks can be rejected as insufficient evidence.
-
-The threshold will eventually be calibrated against a dedicated evaluation dataset rather than treated as a universal constant.
+This allows architectural decisions to be backed by evidence.
 
 ---
 
-## Citation Architecture
+# Technology Stack
 
-Retrieved chunks are converted into citation-ready evidence before reaching the generation layer.
+## Backend
 
-Each evidence item preserves:
+* Python
+* FastAPI
+* Pydantic
+* SQLAlchemy
+* Alembic
 
-* Citation ID
-* Chunk ID
-* Document ID
-* Text
-* Retrieval score
-* Page number
-* Section metadata
+## Data Layer
 
-This allows the eventual answer generator to reference the exact source evidence used to produce an answer.
+* PostgreSQL 16
+* pgvector
+* psycopg
+
+## Document Processing
+
+* pypdf
+* python-docx
+* Tesseract OCR
+* pdf2image
+* Pillow
+
+## Embeddings
+
+* Sentence Transformers
+* `BAAI/bge-small-en-v1.5`
+
+## Generation
+
+* Provider abstraction
+* OpenAI API
+
+## Testing
+
+* pytest
+* HTTPX
+
+## Infrastructure
+
+* Docker
+* Docker Compose
+
+## Planned Frontend
+
+* Next.js
+* TypeScript
+* Tailwind CSS
 
 ---
 
-## Engineering Principles
-
-VeriRAG is being developed around several engineering principles:
-
-### 1. Evidence before generation
-
-Retrieval and evidence construction happen before answer generation.
-
-### 2. No evidence, no confident answer
-
-The system should explicitly acknowledge insufficient evidence rather than hallucinating.
-
-### 3. Modular architecture
-
-Parsing, chunking, embeddings, retrieval, evidence construction, and generation are separated into independent components.
-
-### 4. Provider independence
-
-The generation layer exposes an abstraction so that different LLM providers can be introduced without rewriting the retrieval pipeline.
-
-### 5. Test-driven development
-
-Important components are implemented together with automated tests before being integrated into larger workflows.
-
-### 6. Measurable RAG
-
-Future development will focus on evaluating retrieval quality, evidence coverage, groundedness, and answer quality rather than relying only on subjective chatbot responses.
-
----
-
-## Project Structure
+# Project Structure
 
 ```text
 VeriRAG/
@@ -312,29 +601,29 @@ VeriRAG/
 │   │   ├── api/
 │   │   ├── models/
 │   │   ├── repositories/
+│   │   ├── routes/
 │   │   ├── schemas/
 │   │   ├── config.py
-│   │   └── database.py
+│   │   ├── database.py
+│   │   └── main.py
 │   │
 │   └── tests/
 │
 ├── rag/
 │   ├── ingestion/
-│   │   ├── parsers/
+│   │   ├── parser/
 │   │   └── chunking/
 │   │
 │   ├── embeddings/
 │   ├── retrieval/
 │   ├── generation/
+│   │   └── llm/
+│   │
 │   ├── orchestration/
 │   └── evaluation/
 │
 ├── database/
 │   └── migrations/
-│
-├── frontend/
-│
-├── workers/
 │
 ├── infrastructure/
 │
@@ -345,7 +634,7 @@ VeriRAG/
 │
 ├── tests/
 │
-├── compose.yaml
+├── docker-compose.yml
 ├── pyproject.toml
 ├── .gitignore
 └── README.md
@@ -353,179 +642,297 @@ VeriRAG/
 
 ---
 
-## Development Environment
+# Local Development
 
-Current development environment:
+## 1. Clone
 
-```text
-Python 3.12
-FastAPI
-PostgreSQL 16
-pgvector
-Docker
-pytest
+```bash
+git clone https://github.com/katkarvismaya19-web/VeriRAG.git
+cd VeriRAG
 ```
 
-The project uses a dedicated Python virtual environment:
-
-```text
-.venv/
-```
-
----
-
-## Running the Project
-
-### 1. Activate the virtual environment
-
-Windows PowerShell:
+## 2. Create the virtual environment
 
 ```powershell
-.venv\Scripts\Activate.ps1
+py -3.12 -m venv .venv
 ```
 
-### 2. Start PostgreSQL
+Activate it:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+## 3. Install dependencies
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+## 4. Start PostgreSQL
 
 ```powershell
 docker compose up -d
 ```
 
-### 3. Run the test suite
+Verify:
 
 ```powershell
-pytest
+docker ps
 ```
 
-### 4. Start the FastAPI backend
+The PostgreSQL container should report a healthy status.
+
+## 5. Run the API
 
 ```powershell
 uvicorn backend.app.main:app --reload
 ```
 
-The API and frontend are still under active development.
+API:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
 
 ---
 
-## Testing
+# Testing
 
-The project currently contains tests covering:
+Run the complete test suite:
 
-* API health checks
-* Document upload
-* PDF parsing
-* DOCX parsing
-* Text chunking
-* Paragraph chunking
-* Document-level chunking
-* Chunk repository operations
-* Embedding generation
-* Chunk embedding persistence
-* Vector similarity search
-* Retrieval relevance filtering
-* Evidence context construction
-* Evidence service
-* Generated answer models
-* Generation service
-* Generator abstraction
+```powershell
+pytest
+```
 
-The test suite is intended to grow alongside the RAG pipeline rather than being added only after implementation.
+Run generation tests:
 
----
+```powershell
+pytest rag\generation -q
+```
 
-## Roadmap
+Run evaluation tests:
 
-### Phase 1 — RAG Foundation
+```powershell
+pytest rag\evaluation -q
+```
 
-* [x] Project structure
-* [x] FastAPI backend
-* [x] PostgreSQL
-* [x] pgvector
-* [x] Document upload
-* [x] PDF/DOCX parsing
-* [x] Chunking
-* [x] Embeddings
-* [x] Vector retrieval
-* [x] Retrieval threshold
-* [x] Evidence layer
-* [x] Generation contract
-* [x] Generator abstraction
+Run the real retrieval benchmark:
 
-### Phase 2 — Grounded Generation
-
-* [ ] LLM provider integration
-* [ ] Prompt construction
-* [ ] Citation-aware generation
-* [ ] Citation validation
-* [ ] End-to-end query pipeline
-* [ ] Query API
-
-### Phase 3 — Advanced Retrieval
-
-* [ ] Hybrid search
-* [ ] Reranking
-* [ ] Query rewriting
-* [ ] Multi-document retrieval
-* [ ] Multi-hop reasoning
-* [ ] Comparative queries
-
-### Phase 4 — Trust & Evaluation
-
-* [ ] Insufficient-evidence benchmarking
-* [ ] Retrieval evaluation dataset
-* [ ] Retrieval metrics
-* [ ] Groundedness evaluation
-* [ ] Citation correctness
-* [ ] Contradiction detection
-* [ ] Document-version awareness
-
-### Phase 5 — Production Platform
-
-* [ ] Authentication
-* [ ] Role-based access control
-* [ ] Background workers
-* [ ] Redis
-* [ ] Observability
-* [ ] Audit logging
-* [ ] Feedback and analytics
-* [ ] Production dashboard
-* [ ] CI/CD
-* [ ] Deployment
+```powershell
+pytest rag\evaluation\test_real_report_evaluation.py -q -s
+```
 
 ---
 
-## Project Goal
+# API
 
-The objective of VeriRAG is to demonstrate how a modern RAG system can be engineered as a **reliable knowledge platform rather than a simple chatbot**.
+## Health
 
-The final system should be:
+```http
+GET /health
+```
 
-* **Grounded** — answers are supported by retrieved evidence
-* **Explainable** — users can inspect the sources behind answers
-* **Measurable** — retrieval and generation quality can be evaluated
-* **Modular** — individual components can evolve independently
-* **Secure** — access and enterprise data boundaries are respected
-* **Observable** — system behavior can be monitored and audited
-* **Production-oriented** — architecture and deployment practices reflect real-world systems
+Example:
+
+```json
+{
+  "status": "healthy",
+  "service": "verirag-api",
+  "version": "0.1.0"
+}
+```
+
+## Upload Document
+
+```http
+POST /api/v1/documents/
+```
+
+Supported:
+
+```text
+.pdf
+.docx
+```
+
+## Query Documents
+
+```http
+POST /api/v1/query
+```
+
+Example request:
+
+```json
+{
+  "query": "What is the internship project about?",
+  "limit": 5
+}
+```
+
+The response includes:
+
+* generated answer
+* citations
+* evidence status
+* citation validation status
+* invalid citation IDs when applicable
 
 ---
 
-## Repository
+# Security & SaaS Principles
 
-**GitHub:** `https://github.com/katkarvismaya19-web/VeriRAG`
+Security is being treated as an architectural concern rather than a final feature.
+
+Planned SaaS security boundaries include:
+
+* Tenant isolation
+* Authentication
+* Authorization
+* Role-based access control
+* Knowledge-base permissions
+* Document permissions
+* API key management
+* Secret management
+* Audit logs
+* Rate limiting
+* Usage controls
+* Secure document storage
+* Data lifecycle management
+
+No tenant should be able to retrieve another tenant's documents or evidence.
 
 ---
 
-## Development Philosophy
+# Engineering Principles
 
-VeriRAG is being built incrementally.
+VeriRAG is being developed around several principles:
 
-Each major capability is:
+### 1. Evidence over confidence
 
-1. Designed
-2. Implemented
-3. Tested
-4. Committed
-5. Integrated into the larger pipeline
+A confident answer without evidence is not trustworthy.
 
-This approach keeps the system maintainable while creating a clear engineering history of how the platform evolves from a basic RAG foundation into a production-oriented knowledge intelligence system.
+### 2. Measure before optimizing
+
+Retrieval changes should be evaluated against measurable baselines.
+
+### 3. Separation of concerns
+
+Retrieval, generation, evaluation, storage, and API layers remain independently testable.
+
+### 4. Provider independence
+
+LLM providers should be replaceable without rewriting the RAG pipeline.
+
+### 5. Fail explicitly
+
+Unsupported citations and insufficient evidence should be surfaced rather than hidden.
+
+### 6. SaaS-first architecture
+
+Tenant isolation, permissions, observability, and scalability are considered during architecture design—not bolted on at the end.
+
+### 7. Production over demo
+
+The objective is a system that can evolve from a development project into a deployable product.
+
+---
+
+# Roadmap
+
+```text
+Phase 1  ████████████████████  RAG Foundation             DONE
+Phase 2  ████████████████████  Grounded Generation        DONE
+Phase 3  ███░░░░░░░░░░░░░░░░  Advanced Retrieval         NEXT
+Phase 4  ████░░░░░░░░░░░░░░░  Trust & Evaluation         IN PROGRESS
+Phase 5  ██░░░░░░░░░░░░░░░░░  SaaS Production Platform   PLANNED
+```
+
+### Near-term priorities
+
+1. Establish a larger retrieval benchmark
+2. Measure the current vector-search baseline
+3. Implement hybrid retrieval
+4. Measure hybrid vs. vector baseline
+5. Add reranking
+6. Measure reranking impact
+7. Add query rewriting
+8. Build multi-document and multi-hop retrieval
+9. Expand evaluation infrastructure
+10. Introduce tenant-aware data architecture
+11. Build the SaaS API layer
+12. Build the production dashboard
+
+---
+
+# Long-Term Product
+
+The long-term goal is for VeriRAG to become an enterprise AI knowledge platform rather than simply a RAG API.
+
+Potential use cases include:
+
+* Internal company knowledge assistants
+* HR policy assistants
+* Technical documentation search
+* SOP and operations assistants
+* Compliance knowledge systems
+* Product knowledge assistants
+* Engineering documentation
+* Financial/report analysis
+* Research knowledge systems
+* Customer-support knowledge systems
+
+The platform should allow an organization to connect its knowledge and ask:
+
+> **"What does our information actually say?"**
+
+while providing enough evidence and evaluation signals to determine:
+
+> **"Can we trust the answer?"**
+
+---
+
+# Current Development Philosophy
+
+VeriRAG is intentionally being built incrementally.
+
+Each major capability should have:
+
+```text
+Architecture
+     ↓
+Implementation
+     ↓
+Tests
+     ↓
+Evaluation
+     ↓
+Measurement
+     ↓
+Optimization
+```
+
+The objective is to build a system that can withstand both:
+
+* **real-world product requirements**
+* **deep technical engineering review**
+
+---
+
+## Author
+
+**Vismaya Katkar**
+
+Computer Engineering
+
+GitHub:
+
+`https://github.com/katkarvismaya19-web/VeriRAG`
 
