@@ -8,11 +8,11 @@ VeriRAG is being built with a **SaaS-first architecture** for organizations that
 
 The core principle is simple:
 
-**An AI answer should be traceable to evidence, not just plausible.**
+> **An AI answer should be traceable to evidence, not just plausible.**
 
 ---
 
-## Why VeriRAG?
+# Why VeriRAG?
 
 Enterprise RAG systems have a fundamental problem:
 
@@ -41,7 +41,7 @@ The goal is to build a **measurable enterprise knowledge infrastructure layer**.
 
 VeriRAG is being designed as a SaaS platform where organizations can create isolated knowledge environments for their teams.
 
-### Target workflow
+### Target Workflow
 
 ```text
 Organization
@@ -95,11 +95,46 @@ Future platform capabilities will include:
 * Audit logs
 * Retrieval observability
 * Feedback loops
-* Usage/billing infrastructure
+* Usage metering
+* Subscription and billing infrastructure
 
 ---
 
-# Current Status
+# Current Engineering Status
+
+| Area                             | Status         |
+| -------------------------------- | -------------- |
+| Document ingestion               | 🟢 Working     |
+| PDF/DOCX parsing                 | 🟢 Working     |
+| OCR fallback                     | 🟢 Working     |
+| Page-aware parsing               | 🟢 Working     |
+| Document chunking                | 🟢 Working     |
+| Embeddings                       | 🟢 Working     |
+| PostgreSQL + pgvector            | 🟢 Working     |
+| Vector retrieval                 | 🟢 Working     |
+| Retrieval thresholding           | 🟢 Working     |
+| Evidence layer                   | 🟢 Working     |
+| Grounded generation architecture | 🟢 Working     |
+| LLM provider abstraction         | 🟢 Working     |
+| OpenAI provider                  | 🟢 Implemented |
+| Citation extraction              | 🟢 Working     |
+| Citation validation              | 🟢 Working     |
+| Query orchestration              | 🟢 Working     |
+| Query API                        | 🟢 Working     |
+| Retrieval evaluation             | 🟡 Foundation  |
+| Hybrid retrieval                 | 🔵 Planned     |
+| Reranking                        | 🔵 Planned     |
+| Query rewriting                  | 🔵 Planned     |
+| Multi-hop retrieval              | 🔵 Planned     |
+| Multi-tenancy                    | 🔵 Planned     |
+| Authentication/RBAC              | 🔵 Planned     |
+| SaaS dashboard                   | 🔵 Planned     |
+| Billing/usage metering           | 🔵 Planned     |
+| Production observability         | 🔵 Planned     |
+
+---
+
+# Development Phases
 
 ## Phase 1 — RAG Foundation
 
@@ -155,7 +190,7 @@ Current generation test status:
 13 passed
 ```
 
-The generation pipeline is now:
+### Generation Pipeline
 
 ```text
 Query
@@ -177,7 +212,7 @@ Structured Query Result
 
 ---
 
-# Phase 3 — Advanced Retrieval
+## Phase 3 — Advanced Retrieval
 
 **Status: 🔵 Next**
 
@@ -202,9 +237,9 @@ Instead of adding retrieval techniques because they are popular, VeriRAG will me
 
 ---
 
-# Phase 4 — Trust & Evaluation
+## Phase 4 — Trust & Evaluation
 
-**Status: 🟡 In Progress**
+**Status: 🟡 Foundation**
 
 Implemented:
 
@@ -215,7 +250,7 @@ Implemented:
 * Real-document evaluation
 * Evaluation tests
 
-Current evaluation results include:
+Current evaluation results:
 
 ```text
 Retrieval metric tests:       4 passed
@@ -225,7 +260,7 @@ Real report benchmark:        Recall@5 = 1.00
 
 The first real benchmark evaluates retrieval against an actual processed internship report.
 
-Planned evaluation capabilities:
+### Planned Evaluation Capabilities
 
 * Precision@K
 * Recall@K
@@ -239,18 +274,19 @@ Planned evaluation capabilities:
 * Answer relevance
 * Insufficient-evidence evaluation
 * Contradiction detection
+* Document-version evaluation
 * Regression evaluation
 * Automated evaluation reports
 
 ---
 
-# Phase 5 — SaaS & Production Platform
+## Phase 5 — SaaS & Production Platform
 
 **Status: 🔵 Planned**
 
-VeriRAG will evolve from a RAG engine into a multi-tenant SaaS platform.
+VeriRAG will evolve from a RAG engine into a **multi-tenant enterprise SaaS platform**.
 
-### Multi-tenancy
+### Multi-Tenancy
 
 ```text
 Platform
@@ -370,12 +406,12 @@ Embedding Generation
 pgvector
 ```
 
-### Supported formats
+## Supported Formats
 
 * PDF
 * DOCX
 
-### PDF processing
+## PDF Processing
 
 Native PDF text extraction is attempted first.
 
@@ -537,6 +573,12 @@ Example:
 
 This allows architectural decisions to be backed by evidence.
 
+### Evaluation Principle
+
+Every major retrieval or generation improvement should answer:
+
+> **Did the change measurably improve the system?**
+
 ---
 
 # Technology Stack
@@ -588,6 +630,18 @@ This allows architectural decisions to be backed by evidence.
 * Next.js
 * TypeScript
 * Tailwind CSS
+
+## Planned SaaS Infrastructure
+
+* Redis
+* Background workers
+* Task queues
+* Authentication
+* RBAC
+* Usage metering
+* Observability
+* CI/CD
+* Cloud deployment
 
 ---
 
@@ -651,7 +705,7 @@ git clone https://github.com/katkarvismaya19-web/VeriRAG.git
 cd VeriRAG
 ```
 
-## 2. Create the virtual environment
+## 2. Create the Virtual Environment
 
 ```powershell
 py -3.12 -m venv .venv
@@ -663,7 +717,7 @@ Activate it:
 .\.venv\Scripts\Activate.ps1
 ```
 
-## 3. Install dependencies
+## 3. Install Dependencies
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -807,41 +861,47 @@ Planned SaaS security boundaries include:
 * Secure document storage
 * Data lifecycle management
 
-No tenant should be able to retrieve another tenant's documents or evidence.
+A fundamental platform invariant will be:
+
+> **No tenant should be able to retrieve another tenant's documents, chunks, embeddings, or evidence.**
 
 ---
 
 # Engineering Principles
 
-VeriRAG is being developed around several principles:
+VeriRAG is being developed around several principles.
 
-### 1. Evidence over confidence
+### 1. Evidence Over Confidence
 
 A confident answer without evidence is not trustworthy.
 
-### 2. Measure before optimizing
+### 2. Measure Before Optimizing
 
 Retrieval changes should be evaluated against measurable baselines.
 
-### 3. Separation of concerns
+### 3. Separation of Concerns
 
 Retrieval, generation, evaluation, storage, and API layers remain independently testable.
 
-### 4. Provider independence
+### 4. Provider Independence
 
 LLM providers should be replaceable without rewriting the RAG pipeline.
 
-### 5. Fail explicitly
+### 5. Fail Explicitly
 
 Unsupported citations and insufficient evidence should be surfaced rather than hidden.
 
-### 6. SaaS-first architecture
+### 6. SaaS-First Architecture
 
 Tenant isolation, permissions, observability, and scalability are considered during architecture design—not bolted on at the end.
 
-### 7. Production over demo
+### 7. Production Over Demo
 
 The objective is a system that can evolve from a development project into a deployable product.
+
+### 8. Evaluation-Driven Development
+
+Major changes should be accompanied by tests and measurable evaluation wherever possible.
 
 ---
 
@@ -851,30 +911,35 @@ The objective is a system that can evolve from a development project into a depl
 Phase 1  ████████████████████  RAG Foundation             DONE
 Phase 2  ████████████████████  Grounded Generation        DONE
 Phase 3  ███░░░░░░░░░░░░░░░░  Advanced Retrieval         NEXT
-Phase 4  ████░░░░░░░░░░░░░░░  Trust & Evaluation         IN PROGRESS
+Phase 4  ████░░░░░░░░░░░░░░░  Trust & Evaluation         FOUNDATION
 Phase 5  ██░░░░░░░░░░░░░░░░░  SaaS Production Platform   PLANNED
 ```
 
-### Near-term priorities
+## Near-Term Priorities
 
-1. Establish a larger retrieval benchmark
+1. Build a larger retrieval benchmark
 2. Measure the current vector-search baseline
 3. Implement hybrid retrieval
 4. Measure hybrid vs. vector baseline
 5. Add reranking
 6. Measure reranking impact
 7. Add query rewriting
-8. Build multi-document and multi-hop retrieval
-9. Expand evaluation infrastructure
-10. Introduce tenant-aware data architecture
-11. Build the SaaS API layer
-12. Build the production dashboard
+8. Build multi-document retrieval
+9. Build multi-hop retrieval
+10. Expand evaluation infrastructure
+11. Introduce tenant-aware data architecture
+12. Build authentication and RBAC
+13. Build the SaaS API layer
+14. Build the production dashboard
+15. Add usage metering and billing infrastructure
+16. Add production observability
+17. Deploy the platform
 
 ---
 
 # Long-Term Product
 
-The long-term goal is for VeriRAG to become an enterprise AI knowledge platform rather than simply a RAG API.
+The long-term goal is for VeriRAG to become an **enterprise AI knowledge platform**, rather than simply a RAG API.
 
 Potential use cases include:
 
@@ -899,11 +964,50 @@ while providing enough evidence and evaluation signals to determine:
 
 ---
 
+# Product Quality Goals
+
+As VeriRAG evolves into a SaaS product, the platform will be evaluated across multiple dimensions:
+
+```text
+                    VeriRAG Quality
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+    Retrieval         Generation         Trust
+    Quality             Quality           Quality
+        │                 │                 │
+   Recall@K           Relevance        Citations
+   MRR                Groundedness     Evidence
+   nDCG               Completeness     Contradictions
+   Latency            Consistency      Abstention
+        │                 │                 │
+        └─────────────────┼─────────────────┘
+                          ▼
+                  Product Reliability
+```
+
+Long-term SaaS metrics will also include:
+
+* Query latency
+* Retrieval latency
+* Ingestion latency
+* Token usage
+* Cost per query
+* Documents processed
+* Queries per organization
+* Error rate
+* User feedback
+* Retrieval quality
+* Answer quality
+* Citation validity
+
+---
+
 # Current Development Philosophy
 
 VeriRAG is intentionally being built incrementally.
 
-Each major capability should have:
+Each major capability should follow:
 
 ```text
 Architecture
@@ -926,6 +1030,16 @@ The objective is to build a system that can withstand both:
 
 ---
 
+# Project Status
+
+VeriRAG is currently in the transition from a **RAG foundation** toward an **evaluation-driven advanced retrieval platform**.
+
+The core ingestion, retrieval, evidence, generation, citation, and query orchestration foundations are implemented.
+
+The next major engineering milestone is to establish a broader retrieval benchmark and use it to drive the design of hybrid retrieval and reranking.
+
+---
+
 ## Author
 
 **Vismaya Katkar**
@@ -935,4 +1049,3 @@ Computer Engineering
 GitHub:
 
 `https://github.com/katkarvismaya19-web/VeriRAG`
-
